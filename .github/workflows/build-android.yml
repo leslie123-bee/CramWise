@@ -28,7 +28,7 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-          - name: Accept Android SDK licenses
+      - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses > /dev/null || true
 
       - name: Install project dependencies
