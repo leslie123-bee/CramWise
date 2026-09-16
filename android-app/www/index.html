@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Student Planner</title>
+<title>CramWise</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -417,8 +417,8 @@ function serverSetupTemplate() {
   return `
     <div class="gate">
       <div class="card">
-        <h2>Connect to your Student Planner server</h2>
-        <p>This app needs the address of your hosted Student Planner backend (the one you set up online) to sign in and save your data.</p>
+        <h2>Connect to your CramWise server</h2>
+        <p>This app needs the address of your hosted CramWise backend (the one you set up online) to sign in and save your data.</p>
         <div class="field">
           <label>Server address</label>
           <input id="server-url-input" type="text" inputmode="url" autocapitalize="off" autocorrect="off"
@@ -457,7 +457,7 @@ function shell(innerHtml, activeTab) {
     <div class="topbar">
       <div class="topbar-inner">
         <span class="conn-dot ${state.connected ? 'ok' : 'bad'}" title="${state.connected ? 'Connected' : 'Not connected'}"></span>
-        <div class="brand"><span class="dot">&#9670;</span> Student Planner</div>
+        <div class="brand"><span class="dot">&#9670;</span> CramWise</div>
         <nav class="tabs">
           ${tabs.map(([id, label]) => `<button class="tab ${activeTab === id ? 'active' : ''}" onclick="go('${id}')">${label}</button>`).join('')}
         </nav>
@@ -564,7 +564,7 @@ function authTemplate() {
       <div class="auth-card">
         <div class="auth-brand">
           <div style="color:var(--accent); font-size:1.4rem;">&#9670;</div>
-          <h1>Student Planner</h1>
+          <h1>CramWise</h1>
           <p>Turn your subjects and exam dates into a study timetable you'll actually follow.</p>
         </div>
         <div class="card">
