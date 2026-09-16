@@ -1,6 +1,6 @@
 {
   "appId": "com.studentplanner.leslie",
-  "appName": "Student Planner",
+  "appName": "CramWise",
   "webDir": "www",
   "bundledWebRuntime": false,
   "android": {
