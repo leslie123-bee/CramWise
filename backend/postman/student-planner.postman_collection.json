@@ -1,0 +1,246 @@
+{
+  "info": {
+    "name": "Student Planner API",
+    "description": "Every endpoint in the Student Planner backend, ready to click through in order: register, add a subject and exam, generate a timetable, run a study session, then check progress.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api" },
+    { "key": "token", "value": "" },
+    { "key": "subjectId", "value": "" },
+    { "key": "examId", "value": "" },
+    { "key": "sessionId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Leslie\",\n  \"email\": \"leslie@example.com\",\n  \"password\": \"studyhard123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"leslie@example.com\",\n  \"password\": \"studyhard123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get my profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/users/me"
+          }
+        },
+        {
+          "name": "Complete setup (goal, days, preferred time)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/users/me",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"study_goal\": \"WASSCE preparation\",\n  \"preferred_study_time\": \"evening\",\n  \"available_days\": [\"mon\", \"tue\", \"wed\", \"thu\", \"sat\"]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "List subjects",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/subjects"
+          }
+        },
+        {
+          "name": "Add subject",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/subjects",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject_name\": \"Mathematics\",\n  \"difficulty\": \"hard\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Edit subject",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/subjects/{{subjectId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"difficulty\": \"medium\"\n}" }
+          }
+        },
+        {
+          "name": "Delete subject",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/subjects/{{subjectId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exams",
+      "item": [
+        {
+          "name": "List exams",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/exams"
+          }
+        },
+        {
+          "name": "Add exam",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/exams",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject_id\": \"{{subjectId}}\",\n  \"exam_name\": \"WASSCE Core Maths\",\n  \"exam_date\": \"2026-11-10\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete exam",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/exams/{{examId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Study Planner (Sessions)",
+      "item": [
+        {
+          "name": "Generate timetable",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/sessions/generate"
+          }
+        },
+        {
+          "name": "List sessions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/sessions"
+          }
+        },
+        {
+          "name": "Add session manually",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject_id\": \"{{subjectId}}\",\n  \"topic\": \"Algebra: quadratic equations\",\n  \"session_date\": \"2026-09-20\",\n  \"start_time\": \"18:00\",\n  \"duration_minutes\": 45\n}"
+            }
+          }
+        },
+        {
+          "name": "Edit / reschedule session",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/sessions/{{sessionId}}",
+            "body": { "mode": "raw", "raw": "{\n  \"start_time\": \"19:00\"\n}" }
+          }
+        },
+        {
+          "name": "Start session",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/sessions/{{sessionId}}/start"
+          }
+        },
+        {
+          "name": "Complete session",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/sessions/{{sessionId}}/complete",
+            "body": { "mode": "raw", "raw": "{\n  \"actual_duration_minutes\": 55\n}" }
+          }
+        },
+        {
+          "name": "Delete session",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/sessions/{{sessionId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "Get progress",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/progress"
+          }
+        }
+      ]
+    }
+  ]
+}

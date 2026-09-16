@@ -1,0 +1,4 @@
+# No external packages needed - this project runs entirely on Python's
+# standard library (http.server, sqlite3, hashlib, hmac, json, uuid).
+# This file exists mainly so tools that expect one don't complain; there
+# is nothing to `pip install`.
