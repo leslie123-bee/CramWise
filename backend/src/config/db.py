@@ -28,6 +28,21 @@ _schema_path = BASE_DIR / 'db' / 'schema.sql'
 _connection.executescript(_schema_path.read_text())
 
 
+def _migrate():
+    # CREATE TABLE IF NOT EXISTS (above) only helps brand-new databases -
+    # it does nothing to a users table that already exists from before a
+    # column was added to schema.sql (e.g. an already-running deployment).
+    # This adds any missing columns by hand, safely re-run on every start.
+    existing = {row['name'] for row in _connection.execute('PRAGMA table_info(users)').fetchall()}
+    if 'reset_code_hash' not in existing:
+        _connection.execute('ALTER TABLE users ADD COLUMN reset_code_hash TEXT')
+    if 'reset_code_expires_at' not in existing:
+        _connection.execute('ALTER TABLE users ADD COLUMN reset_code_expires_at TEXT')
+
+
+_migrate()
+
+
 class Database:
     """A thin wrapper so controllers read like `db.get(sql, params)` /
     `db.all(...)` / `db.run(...)` - close to the shape used in the
