@@ -1469,9 +1469,13 @@ function toggleReminders(checked) {
   render();
   await pingHealth();
   render();
+  let lastKnownConnected = state.connected;
   setInterval(async () => {
     if (state.editingServerUrl) return; // don't wipe out mid-typed input on the connect screen
+    if (state.token) return; // signed-in screens refresh their own data; skip full redraws that would wipe any form the person is typing into (e.g. adding a subject)
     await pingHealth();
+    if (state.connected === lastKnownConnected) return; // nothing changed - redrawing here would wipe the sign up/log in form as the person types
+    lastKnownConnected = state.connected;
     render();
   }, 15000);
   setInterval(tickReminders, 60000);
