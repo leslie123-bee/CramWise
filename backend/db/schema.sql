@@ -15,6 +15,10 @@ CREATE TABLE IF NOT EXISTS users (
   -- Kept as one field for v1; split into its own table later if per-day
   -- times are ever needed (see the blueprint's Decisions section).
   available_days        TEXT NOT NULL DEFAULT '[]',
+  -- "Forgot password" support: a hashed one-time code + its expiry
+  -- (epoch milliseconds, as text). Both null when no reset is pending.
+  reset_code_hash        TEXT,
+  reset_code_expires_at  TEXT,
   created_at             TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
