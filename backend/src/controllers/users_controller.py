@@ -1,7 +1,8 @@
 import json
 
 from ..config.db import db
-from ..utils.validators import is_valid_days_array, is_valid_period, within_max_length
+from ..utils.crypto_utils import hash_password, verify_password
+from ..utils.validators import is_non_empty_string, is_valid_days_array, is_valid_period, within_max_length
 from .auth_controller import get_user, public_user
 
 
@@ -47,3 +48,25 @@ def update_me(req, res, next_):
         ),
     )
     res.json(public_user(get_user(req.user_id)))
+
+
+def update_password(req, res, next_):
+    user = get_user(req.user_id)
+    if not user:
+        return res.status(404).json({'error': 'User not found'})
+
+    body = req.body or {}
+    current_password = body.get('current_password')
+    new_password = body.get('new_password')
+
+    if not is_non_empty_string(current_password) or not is_non_empty_string(new_password):
+        return res.status(400).json({'error': 'current_password and new_password are required'})
+    if not verify_password(current_password, user['password_hash']):
+        return res.status(401).json({'error': 'Current password is incorrect'})
+    if len(new_password) < 8:
+        return res.status(400).json({'error': 'New password must be at least 8 characters'})
+    if not within_max_length(new_password, 'password'):
+        return res.status(400).json({'error': 'New password is too long (256 characters max)'})
+
+    db.run('UPDATE users SET password_hash = ? WHERE user_id = ?', (hash_password(new_password), req.user_id))
+    res.json({'message': 'Password updated'})
