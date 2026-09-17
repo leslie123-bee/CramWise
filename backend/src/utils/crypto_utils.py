@@ -14,6 +14,7 @@ import hashlib
 import hmac
 import json
 import os
+import secrets
 import time
 
 _SCRYPT_N = 16384
@@ -37,6 +38,13 @@ def verify_password(password, stored):
     expected = bytes.fromhex(hash_hex)
     candidate = hashlib.scrypt(password.encode('utf-8'), salt=salt, n=_SCRYPT_N, r=_SCRYPT_R, p=_SCRYPT_P, dklen=_KEY_LEN)
     return hmac.compare_digest(candidate, expected)
+
+
+def generate_numeric_code(length=6):
+    # A "forgot password" code typed in from an email - secrets (not
+    # random) because, unlike the join codes in codes.py, this one
+    # protects someone's account and must not be guessable.
+    return ''.join(str(secrets.randbelow(10)) for _ in range(length))
 
 
 def _b64url_encode(data):
